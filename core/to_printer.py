@@ -49,4 +49,6 @@ ws.column_dimensions[st.getColumnLetterByColumnName(ws, '批零差')].width = 13
 
 # 保存
 # os.remove('../target/printer.xlsx')
+if not os.path.isdir(root_path + '/target'):
+    os.mkdir(root_path + '/target')
 wb.save(filename=root_path + '/target/printer.xlsx')
