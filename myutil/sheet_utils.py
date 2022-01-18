@@ -1,3 +1,5 @@
+import os
+
 import openpyxl
 from xls2xlsx import XLS2XLSX
 from myutil.file_utils import getFileExtension
@@ -12,6 +14,7 @@ class sheetutil:
         xlsx_fname = source + ".xlsx"
         x2x.to_xlsx(xlsx_fname)
         wb = openpyxl.load_workbook(xlsx_fname)
+        os.remove(xlsx_fname)
         return wb
     @staticmethod
     def getColumnLetterByColumnName(ws, colname):

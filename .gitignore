@@ -1,7 +1,6 @@
 *.xls
 *.xlsx
 .idea
-/core/var_val.py
 **/__pycache__
 # Byte-compiled / optimized / DLL files
 __pycache__/

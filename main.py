@@ -3,14 +3,13 @@ import sys
 from pathlib import Path
 from openpyxl.utils import get_column_letter
 # libpath = sys.path[0]
-from var_val import root_path
-
+# from var_val import root_path
+root_path = str(Path(sys.argv[0]).parent)
 sys.path.append(root_path)
 from myutil.sheet_utils import sheetutil as st
 from myutil.time_utils import getDay
 from myutil.file_utils import getParentFolder, getFileName
 from openpyxl.styles import Font, Fill, Border, Side
-
 
 def process(sourcefile):
     # 打开一张表
@@ -61,7 +60,11 @@ def process(sourcefile):
     if not os.path.isdir(save_folder):
         os.mkdir(save_folder)
     fname = getFileName(sourcefile)
-    wb.save(filename=save_folder + '/' + getDay() + "_" + fname + '_打印单.xlsx')
+    dest = save_folder + '/' + getDay() + "_" + fname + '_打印单.xlsx'
+    wb.save(filename=dest)
+    print("保存成功！文件位置:", dest)
+    # 执行windows命令，打开excel
+    os.system("start " + dest)
 
 
 if __name__ == '__main__':
