@@ -2,8 +2,6 @@ import os
 import sys
 from pathlib import Path
 from openpyxl.utils import get_column_letter
-# libpath = sys.path[0]
-# from var_val import root_path
 root_path = str(Path(sys.argv[0]).parent)
 sys.path.append(root_path)
 from myutil.sheet_utils import sheetutil as st
