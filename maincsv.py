@@ -15,10 +15,9 @@ def process(sourcefile):
     ws = wb.active
     # st.printWB(ws,2)
     # 删掉订购量为0的行
-    st.delete_rows_when_equals(ws, '订购量', ['0',0])
+    st.delete_rows_when_equals(ws, '订单量', ['0',0])
     # 删掉不必要的列
-    # st.deleteByColumnNames(ws,['商品编码','序号','商品简码','需求量','批零差'])
-    st.deleteByColumnNames(ws, ['商品编码', '序号', '商品简码', '需求量'])
+    st.deleteByColumnNames(ws, ['商品编码'])
     st.printWB(ws)
 
     # 调整样式
@@ -39,15 +38,12 @@ def process(sourcefile):
     ws.cell(ws.max_row, 2).value = getDay()
 
     # 改列名
-    st.rename_firstcolumn(ws, '订购量', '订')
-    st.rename_firstcolumn(ws, '零售指导价', '指导价')
+    st.rename_firstcolumn(ws, '订单量', '订')
 
-    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '商品名称')].width = 28
+    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '商品')].width = 28
+    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '订')].width = 4.9
     ws.column_dimensions[st.getColumnLetterByColumnName(ws, '批发价')].width = 12
-    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '指导价')].width = 12
-    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '订')].width = 4.2
     ws.column_dimensions[st.getColumnLetterByColumnName(ws, '金额')].width = 14
-    ws.column_dimensions[st.getColumnLetterByColumnName(ws, '批零差')].width = 13
 
     # 保存
     if len(sys.argv) >= 2:
@@ -71,5 +67,5 @@ if __name__ == '__main__':
         print(sys.argv)
         sourcefile = sys.argv[1]
     else:
-        sourcefile = root_path + '/resources/source1.xls'
+        sourcefile = root_path + '/resources/source.csv'
     process(sourcefile)

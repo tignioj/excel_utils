@@ -1,7 +1,7 @@
 import os
 
 import openpyxl
-from xls2xlsx import XLS2XLSX
+from pandas import read_csv,read_excel
 from myutil.file_utils import getFileExtension
 from openpyxl.utils import get_column_letter
 
@@ -9,13 +9,27 @@ class sheetutil:
     @staticmethod
     def xls2xlsx(source):
         # 转换表
-        x2x = XLS2XLSX(source)
+        x2x = read_excel(source)
         # xlsx_fname = getTodayYearMonthDayHourMinSec() + "_converted.xlsx"
         xlsx_fname = source + ".xlsx"
-        x2x.to_xlsx(xlsx_fname)
+        x2x.to_excel(xlsx_fname)
         wb = openpyxl.load_workbook(xlsx_fname)
         os.remove(xlsx_fname)
         return wb
+    @staticmethod
+    def csv2xlsx(source):
+
+        # 转换表
+        f = open(source, encoding="gbk")
+        x2x = read_csv(f, encoding="gbk")
+
+        # xlsx_fname = getTodayYearMonthDayHourMinSec() + "_converted.xlsx"
+        xlsx_fname = source + ".xlsx"
+        x2x.to_excel(xlsx_fname)
+        wb = openpyxl.load_workbook(xlsx_fname)
+        os.remove(xlsx_fname)
+        return wb
+
     @staticmethod
     def getColumnLetterByColumnName(ws, colname):
         index = sheetutil.getIndexByColumnName(ws, colname)
@@ -29,6 +43,8 @@ class sheetutil:
         ext = getFileExtension(fname)
         if str(ext).lower() == ".xls":
             return sheetutil.xls2xlsx(fname)
+        if str(ext).lower() == ".csv":
+            return sheetutil.csv2xlsx(fname)
         else:
             return openpyxl.load_workbook(fname)
 
@@ -69,7 +85,7 @@ class sheetutil:
         index = 0
         for c in first_line:
             index += 1
-            if c.strip() == name.strip():
+            if c is not None and c.strip() == name.strip():
                 return index
         return -1
 
@@ -87,7 +103,8 @@ class sheetutil:
         index = sheetutil.getIndexByColumnName(ws,column)
         i = 1
         while i <= ws.max_row:
-            if ws.cell(row=i, column=index).value in condictions:
+            v = ws.cell(i, index).value
+            if v in condictions:
                 ws.delete_rows(i, 1)
             else: i+=1
 
