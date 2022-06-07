@@ -17,8 +17,18 @@ def process(sourcefile):
     # 删掉订购量为0的行
     st.delete_rows_when_equals(ws, '订单量', ['0',0])
     # 删掉不必要的列
-    st.deleteByColumnNames(ws, ['商品编码'])
+    st.deleteByColumnNames(ws, ['商品编码', '要货量', '厂家名称'])
     st.printWB(ws)
+
+    # 给最后一行添加日期
+    ws.cell(ws.max_row+1, 2).value = getDay()
+    # 总数
+    # ws.cell(ws.max_row, 3).value = '=SUM(C1:C' + str(ws.max_row-1) + ')'
+    # ws['C' + str(ws.max_row)] = '=SUM(C1:C' + str(ws.max_row-1) + ')'
+    # ws.cell(ws.max_row, 4).value = '=SUM(D1:D' + str(ws.max_row-1) + ')'
+    ws['D' + str(ws.max_row)] = '=SUM(D1:D' + str(ws.max_row-1) + ')'
+    # ws.cell(ws.max_row, 5).value = '=SUM(E1:E' + str(ws.max_row-1) + ')'
+    ws['E' + str(ws.max_row)] = '=SUM(E1:E' + str(ws.max_row-1) + ')'
 
     # 调整样式
     # 行高
@@ -34,8 +44,6 @@ def process(sourcefile):
             cell.font = f
             cell.border = b
 
-    # 给最后一行添加日期
-    ws.cell(ws.max_row, 2).value = getDay()
 
     # 改列名
     st.rename_firstcolumn(ws, '订单量', '订')
@@ -58,7 +66,8 @@ def process(sourcefile):
     wb.save(filename=dest)
     print("保存成功！文件位置:", dest)
     # 执行windows命令，打开excel
-    os.system("start " + dest)
+    # os.system(r'start' + dest)
+    os.system(r'open ' + dest)
 
 
 if __name__ == '__main__':
