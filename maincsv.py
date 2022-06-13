@@ -20,20 +20,25 @@ def process(sourcefile):
     st.deleteByColumnNames(ws, ['商品编码', '要货量', '厂家名称'])
     st.printWB(ws)
 
+    # 删掉后不必要行后，订正第一列的序号
+    for i in range(1,ws.max_row):
+        ws.cell(i+1, 1).value = str(i)
+
     # 给最后一行添加日期
     ws.cell(ws.max_row+1, 2).value = getDay()
     # 总数
     # ws.cell(ws.max_row, 3).value = '=SUM(C1:C' + str(ws.max_row-1) + ')'
     # ws['C' + str(ws.max_row)] = '=SUM(C1:C' + str(ws.max_row-1) + ')'
     # ws.cell(ws.max_row, 4).value = '=SUM(D1:D' + str(ws.max_row-1) + ')'
+    # 统计信息
     ws['D' + str(ws.max_row)] = '=SUM(D1:D' + str(ws.max_row-1) + ')'
     # ws.cell(ws.max_row, 5).value = '=SUM(E1:E' + str(ws.max_row-1) + ')'
     ws['E' + str(ws.max_row)] = '=SUM(E1:E' + str(ws.max_row-1) + ')'
 
     # 调整样式
     # 行高
-    for i in range(ws.max_row):
-        ws.row_dimensions[i + 1].height = 22.2
+    for i in range(1,ws.max_row):
+        ws.row_dimensions[i].height = 22.2
 
     # 样式-边
     thin = Side(border_style="thin", color="000000")
@@ -67,7 +72,11 @@ def process(sourcefile):
     print("保存成功！文件位置:", dest)
     # 执行windows命令，打开excel
     # os.system(r'start' + dest)
+    # 执行macOS命令，打开excel
     os.system(r'open ' + dest)
+
+    print('---修改后---')
+    st.printWB(ws)
 
 
 if __name__ == '__main__':
